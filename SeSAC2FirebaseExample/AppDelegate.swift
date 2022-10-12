@@ -17,6 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        UIViewController.swizzleMethod() // 
+        
         FirebaseApp.configure()
         
         //원격 알림 시스템에 앱을 등록
@@ -40,14 +42,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //메시지 대리자 설정
         Messaging.messaging().delegate = self
         
-        //현재 등록된 토큰 가져오기
-        Messaging.messaging().token { token, error in
-          if let error = error {
-            print("Error fetching FCM registration token: \(error)")
-          } else if let token = token {
-            print("FCM registration token: \(token)")
-          }
-        }
+        //현재 등록된 토큰 가져오기 -> 회원탈퇴했을 때
+//        Messaging.messaging().token { token, error in
+//          if let error = error {
+//            print("Error fetching FCM registration token: \(error)")
+//          } else if let token = token {
+//            print("FCM registration token: \(token)")
+//          }
+//        }
         
         return true
     }
@@ -76,13 +78,25 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
       Messaging.messaging().apnsToken = deviceToken
     }
     //포그라운드 알림 수신: 로컬/ 푸시 동일
+    // 일정 화면에서는 노티를 띄우고 싶지 않을 때, 만약 카카오톡 채팅화면에 있을 때,
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
        
-        //.banner, .list: iOS14+
-        completionHandler([.badge, .sound, .banner, .list])
+        //최상단 뷰컨트롤러에 따라서 노티를 줄지 말지 결정! -> 채팅앱 같은 경우에는 많이 사용 됨
+        guard let viewController = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.rootViewController?.topViewController else { return }
+        
+        if viewController is SettingViewController {
+            completionHandler([.badge, .list])
+        } else {
+            //.banner, .list: iOS14+
+            completionHandler([.badge, .sound, .banner, .list])
+        }
+
     }
     // 유저가 푸시를 클릭했을 때만 수신 확인 가능
+    
+    // 특정 푸시를 클릭하면 특정 상세화면으로 화면 전환 > 
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        
         
         print("사용자가 푸시를 클릭했습니다.")
         
@@ -98,7 +112,19 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         } else {
             print("NOTHING")
         }
+     
+        guard let viewController = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.rootViewController?.topViewController else { return }
         
+        print(viewController)
+        
+        if viewController is ViewController {   // 최상단 화면이 Viewcontroller 클래스 인스턴스로 타입캐스팅이 가능하다면 실행
+            viewController.navigationController?.pushViewController(SettingViewController(), animated: true)
+        } else if viewController is ProfileViewController { // 상세 화면일 때 dismiss해주기
+            viewController.dismiss(animated: true)
+        } else if viewController is SettingViewController {
+            viewController.navigationController?.popViewController(animated: true)
+        }
+
     }
     
     

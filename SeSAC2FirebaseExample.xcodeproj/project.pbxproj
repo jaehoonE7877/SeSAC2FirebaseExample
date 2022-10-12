@@ -68,6 +68,7 @@
 			children = (
 				25C6F16628F50FBC008BD901 /* SeSAC2FirebaseExample.entitlements */,
 				25C6F16528F4F242008BD901 /* SeSAC2FirebaseExampleRelease.entitlements */,
+				256B876528ED1D55008A9830 /* GoogleService-Info.plist */,
 				256B875128ED1582008A9830 /* AppDelegate.swift */,
 				256B875328ED1582008A9830 /* SceneDelegate.swift */,
 				256B875528ED1582008A9830 /* ViewController.swift */,
@@ -75,7 +76,6 @@
 				256B875A28ED1583008A9830 /* Assets.xcassets */,
 				256B875C28ED1583008A9830 /* LaunchScreen.storyboard */,
 				256B875F28ED1583008A9830 /* Info.plist */,
-				256B876528ED1D55008A9830 /* GoogleService-Info.plist */,
 			);
 			path = SeSAC2FirebaseExample;
 			sourceTree = "<group>";
@@ -349,9 +349,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaehoon.SeSAC2FirebaseExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -379,9 +382,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaehoon.SeSAC2FirebaseExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
